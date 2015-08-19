@@ -82,13 +82,12 @@ CelerySecurity.defineMethod('echo',function(arg){
   console.log(arg);
   return false;
 });
-
 CelerySecurity.defineMethod('logged',function(arg){
   // deny if userId is not set
-  return Meteor.userId == undefined;
+  return Meteor.userId() == undefined;
 });
 
 CelerySecurity.defineMethod('logged_userid',function(arg){
   // deny if userId does not match with the given one during rule creation
-  return Meteor.userId != arg.supplied;
+  return Meteor.userId() != arg.supplied;
 });
