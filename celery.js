@@ -50,7 +50,12 @@ Meteor.startup(function() {
 
       // House keeping. Getting rid of result messages
       if (task_id && task.remove_results()) {
-        CELERY_CLIENT._CELERY_RESPONSE_.remove({_id: task_id});
+        if (Meteor.isServer) {
+          CELERY_CLIENT._CELERY_RESPONSE_.remove({_id: task_id});
+        } else {
+          // Just so we don't need to allow remove from collection
+          Meteor.call('celery.remove.results', task_id);
+        }
       }
 
       // prevent calling completed when task is not running

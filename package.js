@@ -12,7 +12,9 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.1.0.3');
-  api.use(['promise']);
+  api.use(['promise@0.4.1']);
+  api.use(['mongo']);
+  api.use( 'livedata', [ 'server' ] ) ;
 
   api.addFiles('celery.js');
   api.addFiles('CeleryTask.js');
@@ -22,8 +24,7 @@ Package.onUse(function(api) {
 
   api.addFiles(['server/celery.message.js',
                'server/celery.security.js',
-               'server/celery.security.js',
-               'server/celery.security.js'],['server']);
+               'server/celery.server.js'],['server']);
 
   api.export(['CeleryTask','CelerySecurity','CeleryTask']);
 });

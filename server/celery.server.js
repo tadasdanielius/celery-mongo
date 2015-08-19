@@ -11,6 +11,10 @@ Meteor.methods({
       throw new Meteor.Error('401', 'User is not allowed to perform this operation')
     }
     return deliver_message(task);
+  },
+
+  'celery.remove.results': function(task_id) {
+    return CELERY_CLIENT._CELERY_RESPONSE_.remove({_id:task_id});
   }
 });
 
