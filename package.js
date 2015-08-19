@@ -1,8 +1,8 @@
 Package.describe({
   name: 'tadas:celery-mongo',
-  version: '0.0.1',
+  version: '0.0.2',
   // Brief, one-line summary of the package.
-  summary: 'Interface to Celery - distributed task queue',
+  summary: 'Meteor integration with Celery distributed task queue',
   // URL to the Git repository containing the source code for this package.
   git: 'https://github.com/tadasdanielius/celery-mongo',
   // By default, Meteor will default to using README.md for documentation.
