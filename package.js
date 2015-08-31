@@ -1,6 +1,6 @@
 Package.describe({
   name: 'tadas:celery-mongo',
-  version: '0.0.2',
+  version: '0.0.3',
   // Brief, one-line summary of the package.
   summary: 'Meteor integration with Celery distributed task queue',
   // URL to the Git repository containing the source code for this package.
@@ -23,10 +23,11 @@ Package.onUse(function(api) {
   api.addFiles('client/celery.client.js',['client']);
 
   api.addFiles(['server/celery.message.js',
-               'server/celery.security.js',
+               'server/celery.security.js', 'server/celery.postcalls.js',
                'server/celery.server.js'],['server']);
 
-  api.export(['CeleryTask','CelerySecurity','CeleryTask']);
+  api.export(['CelerySecurity', 'CeleryPostCalls'],['server']);
+  api.export(['CeleryTask'],['client','server']);
 });
 
 Package.onTest(function(api) {

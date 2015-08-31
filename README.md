@@ -1,9 +1,7 @@
 tadas:celery-mongo
 =====================
 
-Meteor package that provides integration with Python Celery distributed task queue using MongoDB colections.
-It supports security control mechanisms, client side timeouts mechanisms.
-Note, It is in alpha stage and things may change. 
+Meteor package that provides integration with Python Celery distributed task queue using MongoDB collections. It supports security control mechanisms, postcalls, client side timeouts mechanisms. Note, It is in alpha stage and things may change.
 
 # Installation
 
@@ -13,8 +11,8 @@ $ meteor add tadas:celery-mongo
 
 ## Setting up celery
 
-Before using meteor package celery server must be set up to use mongodb.
-here is simple example how this can be acheaved. First create file
+Before using meteor package celery server must be set up to use mongodb. Here is simple example how this can be acheaved. First create file
+
 **celeryconfig.py**
 
 ```python
@@ -53,8 +51,7 @@ def add(x,y,sleep):
 
 ## Meteor
 
-Once celery is running to call a task just create ***CeleryTask*** object
-and call **call(args)** function. Which returns [promise](https://www.promisejs.org/)
+Once celery is up and running tasks can be invoked by creating ***CeleryTask*** object and calling ***call(args)*** function. Which returns [promise](https://www.promisejs.org/
 
 ### Client
 
@@ -84,7 +81,7 @@ You can also run the same code on server.
 
 ## Security
 
-By default users can execute every task but if needed restrictions can be defined server side
+By default users can execute every task but if needed restrictions can be defined server side. Please note, security restrictions are only tested when task is executed from the browser.
 
 ```js
 // only logged user
@@ -115,6 +112,21 @@ CelerySecurity.defineMethod('my_rule',function(args){
 
 // And then you can use
 CelerySecurity.permit('tasks.my_task').my_rule(user_name)
+```
+
+## Post Calls
+
+Post calls are the way to do post processing on server side after task has been completed, if needed any. Post calls are fired only when method is invoked from the browser, so server can do additional processing, i.e. calculating stats and inserting into collection. If task is executed from the meteor server just use returned [promise](https://www.promisejs.org/)
+
+Post calls can be defined/registered server side
+
+```js
+CeleryPostCalls.defineMethod('my_post_call', function(arg){
+  // do something e.g. insert usage stats
+  console.log('Method completed', arg);
+});
+
+CeleryPostCalls.postcalls('tasks.ping').my_post_call();
 ```
 
 
@@ -164,6 +176,12 @@ var task2 = new CeleryTask('tasks.my_task');
 task1.call(1,2,3);
 task2.call(3,4,5);
 ```
+
+# Change log
+
+## from 0.0.2 to 0.0.3
+
+Added server side postcalls when task is invoked client side
 
 # License
 

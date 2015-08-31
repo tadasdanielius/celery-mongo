@@ -10,7 +10,18 @@ Meteor.methods({
     if (permitted === false) {
       throw new Meteor.Error('401', 'User is not allowed to perform this operation')
     }
-    return deliver_message(task);
+    var id = deliver_message(task);
+    var caller = this.userId;
+
+    // if we want to perform actions on the server side after execution of task
+    // invoked from client side.
+    var queryHandler = CELERY_CLIENT._CELERY_RESPONSE_.find({_id: id}).observe({
+      added: function(doc) {
+        queryHandler.stop();
+        CeleryPostCalls.Execute(doc, task, caller);
+      }
+    });
+    return id;
   },
 
   'celery.remove.results': function(task_id) {
@@ -33,4 +44,5 @@ Meteor.startup(function(){
     var call_id = deliver_message(body);
     return call.wait(call_id);
   }
+
 });

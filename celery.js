@@ -80,7 +80,15 @@ Meteor.startup(function() {
       task_id = id;
       var promise = new Promise(function(resolve, reject){
         var added = function(doc) {
-          queryHandler.stop();
+            if (queryHandler) {
+                queryHandler.stop();
+            }
+
+            // if called from client let also server know when task is finished
+            // no matter of outcome
+            if (self._client_call === true) {
+
+            }
 
           // Should have timedout already
           if (!call.running()) {
