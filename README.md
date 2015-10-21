@@ -40,12 +40,12 @@ app = Celery('tasks', broker=BROKER_URL)
 app.config_from_object('celeryconfig')
 
 @app.task
-def add(x,y,sleep):
-    if sleep < 0:
+def add(x,y,delay):
+    if delay < 0:
         raise Exception('Sleep cannot be less than 0')
 
     # For testing reasons add some delay
-    time.sleep(sec)
+    time.sleep(delay)
     return x + y
 ```
 
